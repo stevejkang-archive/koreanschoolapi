@@ -21,7 +21,7 @@ $ docker run -p 4567:80 juneyoungdev/docker-app:1
 ## How to use
 send GET requset to endpoint
 ```
-curl _XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeNumber=2&classNumber=6&resultType=week"
+curl -XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeNumber=2&classNumber=6&resultType=week"
 ```
 
 ## API Specification
@@ -40,7 +40,7 @@ curl _XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeN
 
 - Example
 ```
-curl _XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeNumber=2&classNumber=6&resultType=week"
+curl -XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeNumber=2&classNumber=6&resultType=week"
 ```
 - Response:
 ```
