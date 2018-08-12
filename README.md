@@ -14,8 +14,8 @@ $ cd koreanschoolapi
 ```
 2. pull and run docker image
 ```
-$ docker pull juneyoungdev/docker-app:1
-$ docker run -p 4567:80 juneyoungdev/docker-app:1
+$ docker pull juneyoungdev/docker-app:latest
+$ docker run -p 4567:80 juneyoungdev/docker-app:latest
 ```
 
 ## How to use
