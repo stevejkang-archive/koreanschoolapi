@@ -27,7 +27,7 @@ $resultType = $_GET['resultType'];
 
 if(strlen($schoolName)<3){                                  
     die('schoolName is too short!');
-} elseif(strlen($schoolName)>30){
+} elseif(strlen($schoolName)>100){
     die('schoolName is too long!');
 } elseif(!isset($schoolName)){                              
     die('schoolName field is empty');
