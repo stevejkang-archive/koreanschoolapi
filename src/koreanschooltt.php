@@ -33,6 +33,18 @@ if(strlen($schoolName)<3){
     die('schoolName field is empty');
 }
 
+if(!isset($gradeNumber)){
+    die('gradeNumber field is empty');
+} elseif(!isset($classNumber)){
+    die('classNumber field is empty');
+}
+
+if(strlen($gradeNumber)>2){
+    die('gradeNumber is too long');
+} elseif(strlen($classNumber)>3){
+    die('classNumber is too long');
+}
+
 if($resultType == "today"){                   
     $day = date('w');                             
 } elseif($resultType == "tomorrow"){
