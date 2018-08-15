@@ -86,6 +86,79 @@ curl -XGET "http://localhost:4567/koreanschooltt.php?schoolName=교하고&gradeN
 }
 ```
 
+### KoreanSchoolMeal
+- Method: GET
+- URL: http://localhost:4567/koreanschoolmeal.php
+- Content-Type: application/json; charset=utf-8
+- Parameters  
+
+| Request | Field Name | Details | Type | Required | Example Value |
+|---------|-------------|----------|--------|----------|---------------|
+| GET | countryCode | 교육청코드 | String | Y | `stu.goe.go.kr` |
+| GET | schoolCode | 학교코드 | String | Y | `J100004922` |
+| GET | schoolName | 학교이름 | String | Y | `교하고등학교` |
+| GET | schoolTypeCode | 학교타입코드 | String | Y | `4` |
+| GET | resultType | 결과타입 | String | Y | `today`/`tomorrow`/`week`/`date` |
+| GET | schoolMealDate | 결과타입==date 경우 특정일자 | String | N | `2018-08-14` |
+
+- Example
+```
+curl -XGET "http://localhost:4567/koreanschoolmeal.php?countryCode=stu.goe.go.kr&schoolCode=J100004922&schoolName=교하고등학교&schoolTypeCode=4&resultType=week"
+
+curl -XGET "http://localhost:4567/koreanschoolmeal.php?countryCode=stu.goe.go.kr&schoolCode=J100004922&schoolName=교하고등학교&schoolTypeCode=4&resultType=date&schoolMealDate=2018-05-17"
+```
+- Response:
+```
+{
+    "apiName": "koreanschoolmeal",
+    "data": {
+        "schoolName": "교하고등학교",
+        "countryCode": "stu.goe.go.kr",
+        "schoolCode": "J100004922",
+        "schoolType": "고등학교",
+        "resultType": "week",
+        "timeStamp": "2018.08.15 10:25:30",
+        "result": [
+            {
+                "date": "2018.08.13",
+                "day": "월요일",
+                "breakfast": null,
+                "lunch": "쌀밥(교하)짜장소스(교하)후르츠탕수육(교하)치커리사과무침(교하)배추김치(교하)팽이장국(교하)",
+                "dinner": null
+            },
+            {
+                "date": "2018.08.14",
+                "day": "화요일",
+                "breakfast": null,
+                "lunch": "찰보리밥(교하)부대찌개(교하)돈육메추리알장조림(교하)삼치무조림(교하)총각김치(교하)수박(교하)",
+                "dinner": null
+            },
+            {
+                "date": "2018.08.15",
+                "day": "수요일",
+                "breakfast": null,
+                "lunch": "급식이 없습니다.",
+                "dinner": null
+            },
+            {
+                "date": "2018.08.16",
+                "day": "목요일",
+                "breakfast": null,
+                "lunch": "칼슘기장밥(교하)얼갈이된장국(교하)삼겹살오븐구이(교하)쌈장(교하)비빔막국수(교하)배추김치(교하)",
+                "dinner": null
+            },
+            {
+                "date": "2018.08.17",
+                "day": "금요일",
+                "breakfast": null,
+                "lunch": "찰현미밥(교하)미니설렁탕(교하)칠리새우(교하)미역줄기볶음(교하)깍두기(교하)",
+                "dinner": null
+            }
+        ]
+    }
+}
+```
+
 ## Developer
 Juneyoung Kang [juneyoungdev@gmail.com](mailto:juneyoungdev@gmail.com)
 
