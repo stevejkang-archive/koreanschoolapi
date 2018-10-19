@@ -23,7 +23,8 @@ header("Content-type: application/json; charset=UTF-8");
 $schoolName = $_GET['schoolName'];                
 $gradeNumber = $_GET['gradeNumber'];                   
 $classNumber = $_GET['classNumber'];                   
-$resultType = $_GET['resultType'];                     
+$resultType = $_GET['resultType'];     
+$ttDate = $_GET['ttDate'];                  
 
 if(strlen($schoolName)<3){                                  
     die('schoolName is too short!');
@@ -51,6 +52,12 @@ if($resultType == "today"){
     $day = date('w', strtotime('24 hours', time()));          
 } elseif($resultType == "week"){
     $day = NULL;                                                
+} elseif($resultType == "date"){
+    if(isset($ttDate)){
+        $day = date('w', strtotime($ttDate));
+    } else {
+        die('ttDate field is empty');
+    }
 } elseif(!isset($resultType)){
     die('resultType field is empty');             
 } else {
@@ -71,14 +78,29 @@ if($result_code==NULL){
     die('school is not compatible with this api');          
 }
 
-$tt_code = "34739_".$result_code."_0_1";               
-$ttcode_base64 = base64_encode($tt_code);                    
+if(strtotime($ttDate) > strtotime('this sunday', time())){
+    $tt_code = "34739_".$result_code."_0_2"; 
+} else {
+    $tt_code = "34739_".$result_code."_0_1";
+}       
 
-$url_tt = "http://comci.kr:4081/98372?".$ttcode_base64;  
-$json_tt = file_get_contents($url_tt);                     
+$ttcode_base64 = base64_encode($tt_code);                    
+$url_tt = "http://comci.kr:4081/98372?".$ttcode_base64; 
+
+if (function_exists('curl_init')) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url_tt);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0'); 
+    $content = curl_exec($ch);
+    curl_close($ch); 
+    $json_tt = $content;
+}
+
 $json_tt = stripslashes(html_entity_decode($json_tt));          
 $array_tt = json_decode(trim($json_tt), true);                
-$result_tt = $array_tt['자료81'][$gradeNumber][$classNumber]; 
+$result_tt = $array_tt['자료14'][$gradeNumber][$classNumber]; 
 
 $result_teacher = $array_tt['자료46'];                          
 $result_subject = $array_tt['긴자료92'];                      
@@ -108,13 +130,39 @@ function result($class, $result_tt, $result_teacher, $result_subject, $day){
     if($result=='(  *)'){                                      
         return NULL;                                        
     } else if($result=='()'){
-        usleep(100000);
-        header("Refresh:0");
+        return NULL;
     }
     return $result;                                         
 }
 
 switch($resultType){
+    case "date":
+        $array = array(
+            'apiName' => 'koreanschooltt',
+            'data' => array(
+                'schoolName' => $schoolName,
+                'gradeNumber' => $gradeNumber,
+                'classNumber' => $classNumber,
+                'resultType' => $resultType,
+                'date' => $ttDate,
+                'timeStamp' => date('Y.m.d H:i:s'),
+                'result' => array(
+                    'date' => date('Y.m.d', strtotime($ttDate)),
+                    'day' => dayKorean(date('w', strtotime($ttDate))),
+                    'class01' => result(1, $result_tt, $result_teacher, $result_subject, $day),
+                    'class02' => result(2, $result_tt, $result_teacher, $result_subject, $day),
+                    'class03' => result(3, $result_tt, $result_teacher, $result_subject, $day),
+                    'class04' => result(4, $result_tt, $result_teacher, $result_subject, $day),
+                    'class05' => result(5, $result_tt, $result_teacher, $result_subject, $day),
+                    'class06' => result(6, $result_tt, $result_teacher, $result_subject, $day),
+                    'class07' => result(7, $result_tt, $result_teacher, $result_subject, $day),
+                    'class08' => result(8, $result_tt, $result_teacher, $result_subject, $day),
+                    'class09' => result(9, $result_tt, $result_teacher, $result_subject, $day),
+                    'class10' => result(10, $result_tt, $result_teacher, $result_subject, $day)
+                )
+            )
+        );
+        break;
     case "today":
         $array = array(
             'apiName' => 'koreanschooltt',
